@@ -15,7 +15,7 @@ export function getBooks(req, res) {
       books,
     ))
     .catch(err => res.status(404).send(
-      `${err.errors[0].message}!`,
+      { message: `${err.errors[0].message}!` },
     ));
 }
 
@@ -38,7 +38,10 @@ export function addBook(req, res) {
         book.update({
           count: book.count + 1,
         });
-        res.status(201).send({ message: 'Book created!' });
+        res.status(201).send({ 
+          message: 'Book added to existing library!',
+          book,
+        });
       } else {
         // Otherwise create a new book 
         Book
@@ -51,12 +54,15 @@ export function addBook(req, res) {
             count: req.body.count,
           })
           .then(newBook => res.status(200).send(
-            newBook,
+            {
+              message: 'Added book successfully', 
+              book: newBook,
+            },
           ));
       }
     })
     .catch(err => res.status(400).send(
-      `${err.errors[0].message}!`,
+      { message: `${err.errors[0].message}!` },
     ));
 }
 
@@ -80,7 +86,7 @@ export function getUserBooks(req, res) {
         books,
       ))
       .catch(err => res.status(400).send(
-        `${err.errors[0].message}!`,
+        { message: `${err.errors[0].message}!` },
       ));
   } else if (req.query.returned === 'false') {
     return BorrowDetail
@@ -96,7 +102,7 @@ export function getUserBooks(req, res) {
         books,
       ))
       .catch(err => res.status(400).send(
-        `${err.errors[0].message}!`,
+        { message: `${err.errors[0].message}!` },
       ));
   }
   return res.status(400).send({ message: 'Query missing or wrong: use /path?returned=true' });
@@ -110,23 +116,47 @@ export function getUserBooks(req, res) {
  */
 export function modifyBook(req, res) {
   return Book
-    .update({
-      title: req.body.title || Book.title,
-      isbn: req.body.isbn || Book.isbn,
-      year: req.body.year || Book.year,
-      author: req.body.author || Book.author,
-      description: req.body.description || Book.description,
-      count: req.body.count || Book.count,
-    },
-    {
+    .findOne({
       where: {
         id: req.params.bookId,
       },
     })
-    .then(book => res.status(202).send(book[0] === 1 ? { message: 'Book update successful!' } : { message: 'Book update not successful!' }))
+    .then((book) => {
+      book.update({
+        title: req.body.title || book.title,
+        isbn: req.body.isbn || book.isbn,
+        year: req.body.year || book.year,
+        author: req.body.author || book.author,
+        description: req.body.description || book.description,
+        count: req.body.count || book.count,
+      });
+      res.status(202).send({
+        message: 'Book update successful!',
+        book,
+      });
+    })
     .catch(err => res.status(400).send(
-      `${err.errors[0].message}!`,
+      { message: `${err.errors[0].message}!` },
     ));
+
+  // return Book
+  //   .update({
+  //     title: req.body.title || Book.title,
+  //     isbn: req.body.isbn || Book.isbn,
+  //     year: req.body.year || Book.year,
+  //     author: req.body.author || Book.author,
+  //     description: req.body.description || Book.description,
+  //     count: req.body.count || Book.count,
+  //   },
+  //   {
+  //     where: {
+  //       id: req.params.bookId,
+  //     },
+  //   })
+  //   .then(book => res.status(202).send(book[0] === 1 ? { message: 'Book update successful!' } : { message: 'Book update not successful!' }))
+  //   .catch(err => res.status(400).send(
+  //     { message: `${err.errors[0].message}!` },
+  //   ));
 }
 
 /**
@@ -155,10 +185,13 @@ export function borrowBook(req, res) {
       userid: req.params.userId,
     })
     .then(borrowdetail => res.status(200).send(
-      borrowdetail,
+      {
+        message: 'Book borrowed successfully',
+        borrowdetail,
+      },
     ))
     .catch(err => res.status(400).send(
-      `${err.errors[0].message}!`,
+      { message: `${err.errors[0].message}!` },
     ));
 }
 
@@ -193,7 +226,7 @@ export function returnBook(req, res) {
     })
     .then(borrowdetail => res.status(200).send(borrowdetail[0] > 0 ? { message: 'Book returned successfully!' } : { message: 'Book not returned!' }))
     .catch(err => res.status(400).send(
-      `${err.errors[0].message}!`,
+      { message: `${err.errors[0].message}!` },
     ));
 }
 

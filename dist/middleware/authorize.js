@@ -22,12 +22,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function verifyUserSession(req, res, next) {
   var token = req.body.token || req.headers.token;
   if (!token) {
-    res.status(403).send('Session token is required!');
+    res.status(403).send({ message: 'Session token is required!' });
   } else {
     // Check if token matches the one provided at login
     _jsonwebtoken2.default.verify(token, process.env.SECRET_KEY, function (err) {
       if (err) {
-        res.status(500).send('Invalid token!');
+        res.status(500).send({ message: 'Invalid token!' });
       } else {
         next();
       }
@@ -45,13 +45,13 @@ function verifyUserSession(req, res, next) {
 function verifyAdminStatus(req, res, next) {
   var token = req.body.token || req.headers.token;
   if (!token) {
-    res.status(401).send('Session token is required!');
+    res.status(401).send({ message: 'Session token is required!' });
   } else {
     // Check if token matches the one provided at login
     _jsonwebtoken2.default.verify(token, process.env.SECRET_KEY, function (err, decoded) {
       // Check id session is of admin
       if (decoded.isadmin !== true) {
-        res.status(403).send('Forbidden access!');
+        res.status(403).send({ message: 'Forbidden access!' });
       } else next();
     });
   }

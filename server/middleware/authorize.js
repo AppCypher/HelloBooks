@@ -9,12 +9,12 @@ import jwt from 'jsonwebtoken';
 export function verifyUserSession(req, res, next) {
   const token = req.body.token || req.headers.token;
   if (!token) {
-    res.status(403).send('Session token is required!');
+    res.status(403).send({ message: 'Session token is required!' });
   } else {
     // Check if token matches the one provided at login
     jwt.verify(token, process.env.SECRET_KEY, (err) => {
       if (err) {
-        res.status(500).send('Invalid token!');
+        res.status(500).send({ message: 'Invalid token!' });
       } else {
         next();
       }
@@ -32,13 +32,13 @@ export function verifyUserSession(req, res, next) {
 export function verifyAdminStatus(req, res, next) {
   const token = req.body.token || req.headers.token;
   if (!token) {
-    res.status(401).send('Session token is required!');
+    res.status(401).send({ message: 'Session token is required!' });
   } else {
     // Check if token matches the one provided at login
     jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
       // Check id session is of admin
       if (decoded.isadmin !== true) {
-        res.status(403).send('Forbidden access!');
+        res.status(403).send({ message: 'Forbidden access!' });
       } else next();
     });
   }

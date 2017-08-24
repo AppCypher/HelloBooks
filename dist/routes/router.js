@@ -45,7 +45,7 @@ router.route('/api/v1/books').get(_authorize.verifyUserSession, _book.getBooks);
 router.route('/api/v1/users/:userId/books').get(_authorize.verifyUserSession, _validate.checkUserExists, _book.getUserBooks);
 
 // Handle request for allowing a user to borrow a book (admin)
-router.route('/api/v1/users/:userId/books').post(_authorize.verifyUserSession, _authorize.verifyAdminStatus, _validate.checkUserExists, _validate.checkBookCount, _validate.checkUserBorrowedBook, _book.borrowBook);
+router.route('/api/v1/users/:userId/books').post(_authorize.verifyUserSession, _validate.checkUserExists, _validate.checkBookCount, _validate.checkUserBorrowedBook, _book.borrowBook);
 
 // Handle request for allowing user to return a book (admin)
 router.route('/api/v1/users/:userId/books').put(_authorize.verifyUserSession, _authorize.verifyAdminStatus, _validate.checkUserExists, _validate.checkUserReturnedBook, _book.returnBook);
