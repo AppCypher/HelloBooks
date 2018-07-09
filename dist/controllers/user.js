@@ -42,7 +42,7 @@ function createUser(req, res) {
   }).then(function (user) {
     return res.status(201).send(user);
   }).catch(function (err) {
-    return res.status(400).send(err.errors[0].message + '!');
+    return res.status(400).send({ message: err.errors[0].message + '!' });
   });
 }
 
@@ -68,7 +68,7 @@ function loginUser(req, res) {
       res.status(401).send({ message: 'Wrong password or username!' });
     });
   }).catch(function (err) {
-    return res.status(400).send(err.errors[0].message + '!');
+    return res.status(400).send({ message: err.errors[0].message + '!' });
   });
 }
 
@@ -91,6 +91,6 @@ function createAdminUser(req, res) {
   }).then(function (user) {
     return res.status(201).send(user);
   }).catch(function (err) {
-    return res.status(400).send(err.errors[0].message + '!');
+    return res.status(400).send({ message: err.errors[0].message + '!' });
   });
 }

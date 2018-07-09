@@ -25,7 +25,7 @@ export function createUser(req, res) {
       user,
     ))
     .catch(err => res.status(400).send(
-      `${err.errors[0].message}!`,
+      { message: `${err.errors[0].message}!` },
     ));
 }
 
@@ -54,7 +54,7 @@ export function loginUser(req, res) {
       });
     })
     .catch(err => res.status(400).send(
-      `${err.errors[0].message}!`,
+      { message: `${err.errors[0].message}!` },
     ));
 }
 
@@ -80,6 +80,6 @@ export function createAdminUser(req, res) {
       user,
     ))
     .catch(err => res.status(400).send(
-      `${err.errors[0].message}!`,
+      { message: `${err.errors[0].message}!` },
     ));
 }

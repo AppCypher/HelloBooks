@@ -47,7 +47,7 @@ router
 // Handle request for allowing a user to borrow a book (admin)
 router
   .route('/api/v1/users/:userId/books')
-  .post(verifyUserSession, verifyAdminStatus,
+  .post(verifyUserSession, 
     checkUserExists, checkBookCount, checkUserBorrowedBook, borrowBook);
 
 // Handle request for allowing user to return a book (admin)

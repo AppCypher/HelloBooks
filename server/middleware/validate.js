@@ -18,7 +18,7 @@ export function checkBookExists(req, res, next) {
     })
     .then((book) => {
       if (!book) {
-        res.status(404).send("Can't find book!");
+        res.status(404).send({ message: "Can't find book!" });
       }
       next();
     });
@@ -40,7 +40,7 @@ export function checkUserExists(req, res, next) {
     })
     .then((user) => {
       if (!user) {
-        res.status(404).send('User does not exist!');
+        res.status(404).send({ message: 'User does not exist!' });
       } else next();
     });
 }
@@ -62,7 +62,7 @@ export function checkUserNameExists(req, res, next) {
     })
     .then((user) => {
       if (!user) {
-        res.status(404).send('User does not exist!');
+        res.status(404).send({ message: 'User does not exist!' });
       } else next();
     });
 }
@@ -84,7 +84,7 @@ export function checkUserBorrowedBook(req, res, next) {
     })
     .then((borrowdetail) => {
       if (borrowdetail) {
-        res.status(409).send('User already borrowed book!');
+        res.status(409).send({ message: 'User already borrowed book!' });
       } else next();
     });
 }
@@ -108,7 +108,7 @@ export function checkBookCount(req, res, next) {
     })
     .then((book) => {
       if (!book) {
-        res.status(400).send('Out of requested book!');
+        res.status(400).send({ message: 'Out of requested book!' });
       } else next();
     });
 }
@@ -129,7 +129,7 @@ export function checkUserReturnedBook(req, res, next) {
     })
     .then((borrowdetail) => {
       if (!borrowdetail && borrowdetail.returndate === null) {
-        res.status(400).send('Book already returned!');
+        res.status(400).send({ message: 'Book already returned!' });
       } else next();
     });
 }
